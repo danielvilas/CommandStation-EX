@@ -13,6 +13,7 @@
  */
 
 #include "DCCEX.h"
+#include "UiHandler.h"
 
 #ifdef ARDUINO_AVR_UNO 
   #include <SoftwareSerial.h>
@@ -40,8 +41,8 @@ void setup() {
    //  NOTE: References to Serial1 are for the serial port used to connect
    //        your wifi chip/shield.    
   
-  Serial1.begin(WIFI_BAUD);
-  WifiInterface::setup(Serial1, F("Your network name"), F("your network password"),F("DCCEX"),3532);
+  //Serial1.begin(WIFI_BAUD);
+  //WifiInterface::setup(Serial1, F("Your network name"), F("your network password"),F("DCCEX"),3532);
   
    // Responsibility 3: Start the DCC engine.
    // Note: this provides DCC with two motor drivers, main and prog, which handle the motor shield(s)
@@ -53,7 +54,8 @@ void setup() {
    // Optionally a Timer number (1..4) may be passed to DCC::begin to override the default Timer1 used for the
    // waveform generation.  e.g.  DCC::begin(STANDARD_MOTOR_SHIELD,2); to use timer 2
    
-   DCC::begin(STANDARD_MOTOR_SHIELD);
+   DCC::begin(JUMPED_MOTOR_SHIELD);
+   UiHandler::begin(BTN_PIN, RUN_PIN, ERR_PIN, NEO_PIN);
 
 }
 
@@ -68,7 +70,8 @@ void loop() {
   serialParser.loop(Serial);
 
   // Responsibility 3: Optionally handle any incoming WiFi traffic
-  WifiInterface::loop();
+  //WifiInterface::loop();
+  UiHandler::loop();
 
 
 }
